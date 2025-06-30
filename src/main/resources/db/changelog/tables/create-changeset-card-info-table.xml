@@ -15,15 +15,15 @@
             <constraints nullable="false"/>
             </column>
 
-            <column name="number" type="smallint">
+            <column name="number" type="varchar(16)">
                 <constraints nullable="false" unique="true"/>
             </column>
 
-            <column name="holder" type="varchar(64)">
+            <column name="holder" type="varchar(26)">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="expiration_date" type="date">
+            <column name="expiration_date" type="varchar(5)">
                 <constraints nullable="false"/>
             </column>
 
