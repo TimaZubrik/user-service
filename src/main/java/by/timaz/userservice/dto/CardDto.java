@@ -21,5 +21,5 @@ public class CardDto {
     private String holder;
     @NotBlank
     @Pattern(regexp = "\\d{2}/\\d{2}")
-    private String exp;
+    private String expiryDate;
 }
