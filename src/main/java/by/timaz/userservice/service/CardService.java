@@ -21,9 +21,6 @@ public class CardService {
         return cardRepository.findById(id).orElse(null);
     }
 
-    public List<Card> getCardsById(List<Long> ids) {
-        return cardRepository.findAllById(ids);
-    }
     @Transactional
     public void updateCard(Card card) {
         cardRepository.save(card);

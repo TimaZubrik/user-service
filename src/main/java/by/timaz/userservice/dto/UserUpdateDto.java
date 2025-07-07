@@ -1,8 +1,6 @@
 package by.timaz.userservice.dto;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -11,29 +9,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDto {
-    private long id;
-    @NotBlank(message = "Name cannot be empty. ")
+public class UserUpdateDto {
     @Pattern(regexp = "^[\\p{L}]+(?:[ \\p{Pd}’']?[\\p{L}]+)*$",
             flags = Pattern.Flag.UNICODE_CASE,
             message = "Name cannot contain digits and other special characters")
     private String name;
-    @NotBlank(message = "Surname cannot be empty")
     @Pattern(regexp = "^[\\p{L}]+(?:[ \\p{Pd}’']?[\\p{L}]+)*$",
             flags = Pattern.Flag.UNICODE_CASE,
             message = "Surname cannot contain digits and other special characters")
     private String surname;
-    @NotBlank(message = "Email cannot be empty")
-    @Email(message = "Incorrect email")
+    @Email(message = "incorrect email")
     private String email;
-    @NotNull(message = "Birthday cannot be empty")
-    @Past(message = "Birthday should be in the past")
+    @Past(message = "birthday should be in the past")
     private LocalDate birthday;
-    private List<CardDto> cards;
 }
