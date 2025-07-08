@@ -1,7 +1,9 @@
 package by.timaz.userservice.controller;
 
+import by.timaz.userservice.dto.CardDto;
 import by.timaz.userservice.dto.UserDto;
 import by.timaz.userservice.dto.UserUpdateDto;
+import by.timaz.userservice.service.CardService;
 import by.timaz.userservice.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping(path = "/user")
 public class UserController {
     private final UserService userService;
+    private final CardService cardService;
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> getUser(@PathVariable Long id) {
@@ -48,4 +51,5 @@ public class UserController {
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody @Valid UserUpdateDto user) {
         return new ResponseEntity<>( userService.updateUser(id, user), HttpStatus.OK);
     }
+
 }

@@ -8,5 +8,6 @@
     <include file="tables/create-changeset-users-table.xml" relativeToChangelogFile="true"/>
     <include file="indexes/create-changeset-index-users.xml" relativeToChangelogFile="true"/>
     <include file="indexes/create-changeset-index-card.xml" relativeToChangelogFile="true"/>
+    <include file="tables/create-changeset-users-cards-table.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

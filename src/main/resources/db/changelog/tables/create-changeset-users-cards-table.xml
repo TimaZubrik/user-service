@@ -4,31 +4,27 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="create_table_users" author="Timofey Zubrik">
-        <createTable  tableName="users">
+    <changeSet id="create-users-cards-table" author="Timofey Zubrik">
+        <createTable tableName="users_cards">
             <column autoIncrement="true" name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="varchar(64)">
+            <column name="user_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="surname" type="varchar(64)">
+            <column name="card_id" type="bigint">
                 <constraints nullable="false"/>
-            </column>
-            <column name="birth_date" type="date">
-                <constraints nullable="false"/>
-            </column>
-            <column name="email" type="varchar(64)">
-                <constraints unique="true" nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseTableName="card_info"
+        <addForeignKeyConstraint baseTableName="users_cards"
                                  baseColumnNames="user_id"
                                  constraintName="fk_user_id"
                                  referencedTableName="users"
                                  referencedColumnNames="id"/>
-    </changeSet>
-    <changeSet id="delete-duplicate-index" author="Timofey Zubrik">
-        <dropIndex tableName="users" indexName="idx_email"/>
+        <addForeignKeyConstraint baseTableName="users_cards"
+                                 baseColumnNames="card_id"
+                                 constraintName="fk_card_id"
+                                 referencedTableName="card_info"
+                                 referencedColumnNames="id"/>
     </changeSet>
 </databaseChangeLog>

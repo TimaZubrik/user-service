@@ -30,4 +30,7 @@
         </createTable>
 
     </changeSet>
+    <changeSet id="delete-user-id" author="Timofey Zubrik">
+        <dropColumn tableName="card_info" columnName="user_id"/>
+    </changeSet>
 </databaseChangeLog>
