@@ -19,15 +19,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.UUID;
+
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(path = "/user")
+@RequestMapping(path = "/user/")
 public class UserController {
     private final UserService userService;
     private final CardService cardService;
 
-    @GetMapping(path = "/{id}")
-    public ResponseEntity<?> getUser(@PathVariable Long id) {
+    @GetMapping(path = "{id}")
+    public ResponseEntity<?> getUser(@PathVariable UUID id) {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
@@ -36,20 +38,26 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserByEmail(email), HttpStatus.OK);
     }
 
-    @PostMapping(path = "/create")
+    @PostMapping(path = "registration")
     public ResponseEntity<?> createUser(@RequestBody @Valid UserDto user) {
         return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path = "/delete/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+    @DeleteMapping(path = "{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
         return new ResponseEntity<>("User deleted",HttpStatus.OK);
     }
 
-    @PatchMapping(path = "/update/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody @Valid UserUpdateDto user) {
+    @PatchMapping(path = "{id}")
+    public ResponseEntity<?> updateUser(@PathVariable UUID id, @RequestBody @Valid UserUpdateDto user) {
         return new ResponseEntity<>( userService.updateUser(id, user), HttpStatus.OK);
+    }
+
+    @PatchMapping(path = "{id}/new-card")
+    public ResponseEntity<?> addCard(@PathVariable UUID id, @RequestBody @Valid CardDto card) {
+        cardService.createCard(card, id);
+        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
 }

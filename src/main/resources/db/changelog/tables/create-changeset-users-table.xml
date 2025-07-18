@@ -6,8 +6,8 @@
 
     <changeSet id="create_table_users" author="Timofey Zubrik">
         <createTable  tableName="users">
-            <column autoIncrement="true" name="id" type="bigint">
-                <constraints primaryKey="true" nullable="false"/>
+            <column name="id" type="uniqueidentifier" defaultValueComputed="gen_random_uuid ()">
+                <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="name" type="varchar(64)">
                 <constraints nullable="false"/>
@@ -22,13 +22,5 @@
                 <constraints unique="true" nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseTableName="card_info"
-                                 baseColumnNames="user_id"
-                                 constraintName="fk_user_id"
-                                 referencedTableName="users"
-                                 referencedColumnNames="id"/>
-    </changeSet>
-    <changeSet id="delete-duplicate-index" author="Timofey Zubrik">
-        <dropIndex tableName="users" indexName="idx_email"/>
     </changeSet>
 </databaseChangeLog>

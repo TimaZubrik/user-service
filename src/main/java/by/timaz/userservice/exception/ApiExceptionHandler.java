@@ -1,9 +1,11 @@
 package by.timaz.userservice.exception;
 
+import org.apache.coyote.BadRequestException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,6 +25,8 @@ public class ApiExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
+
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
 
@@ -35,6 +39,9 @@ public class ApiExceptionHandler {
         if(causeMessage.contains("null")) {
             stringBuilder.append("You cannot insert a null value. ");
         }
+        if(causeMessage.contains("(user_id, number)=")){
+            stringBuilder.append("You already added a card with this number. ");
+        }
         message = stringBuilder.toString();
 
         ErrorResponse response = new ErrorResponse(
@@ -44,6 +51,8 @@ public class ApiExceptionHandler {
 
        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
+
+
     @ExceptionHandler(DateTimeParseException.class)
     public ResponseEntity<ErrorResponse> handleDateTimeParseException(DateTimeParseException e) {
         ErrorResponse response = new ErrorResponse(
@@ -53,6 +62,8 @@ public class ApiExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
+
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         ErrorResponse response = new ErrorResponse(
@@ -62,6 +73,30 @@ public class ApiExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 LocalDateTime.now()
                 );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+        ErrorResponse response = new ErrorResponse(
+                e.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException e) {
+        ErrorResponse response = new ErrorResponse(
+                e.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now()
+        );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }

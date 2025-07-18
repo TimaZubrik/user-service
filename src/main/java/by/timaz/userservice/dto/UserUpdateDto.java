@@ -8,13 +8,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserUpdateDto {
+public class UserUpdateDto implements Serializable {
     @Pattern(regexp = "^[\\p{L}]+(?:[ \\p{Pd}’']?[\\p{L}]+)*$",
             flags = Pattern.Flag.UNICODE_CASE,
             message = "Name cannot contain digits and other special characters")

@@ -8,7 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -16,7 +15,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.UUID;
 
 
 @Entity
@@ -28,7 +27,7 @@ import java.util.Set;
 public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private UUID id;
     @Column(name = "number",nullable = false, unique=true, length = 16)
     private String number;
     @Column(name = "holder", nullable = false, length = 26)
@@ -36,6 +35,7 @@ public class Card {
     @Column(name = "expiration_date",nullable = false, length = 5)
     private String expiryDate;
 
-    @ManyToMany(mappedBy = "cards")
-    private Set<User> users;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

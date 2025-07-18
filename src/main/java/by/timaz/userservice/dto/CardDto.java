@@ -7,16 +7,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CardDto {
-    private long id;
+public class CardDto implements Serializable {
     @NotBlank(message = "card number cannot be empty")
-    @Pattern(regexp = "\\d{16}",
-            message = "card number must contain 16 digits")
+    @Pattern(regexp = "^\\d{13,19}$",
+            message = "card number must contain from 13 to 19 digits")
     private String number;
     @Pattern(regexp = "^[A-Z][A-Z]+(?: [A-Z]+)*$",
             message = "holder's name must contain no more than 26 capital letters")

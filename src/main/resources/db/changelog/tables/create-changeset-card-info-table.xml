@@ -7,30 +7,35 @@
     <changeSet id="create_table_card_info" author="Timofey Zubrik">
         <createTable tableName="card_info">
 
-            <column autoIncrement="true" name="id" type="bigint">
+            <column name="id" type="uniqueidentifier" defaultValueComputed="gen_random_uuid ()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-
-            <column name="user_id" type="bigint">
-            <constraints nullable="false"/>
+            <column name="user_id" type="uniqueidentifier">
+                <constraints nullable="false"/>
             </column>
 
-            <column name="number" type="smallint">
-                <constraints nullable="false" unique="true"/>
+            <column name="number" type="varchar(19)">
+                <constraints nullable="false"/>
             </column>
 
             <column name="holder" type="varchar(64)">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="expiration_date" type="date">
+            <column name="expiration_date" type="varchar(5)">
                 <constraints nullable="false"/>
             </column>
 
         </createTable>
-
+<addForeignKeyConstraint baseTableName="card_info"
+                         baseColumnNames="user_id"
+                         constraintName="fk_user_id"
+                         referencedTableName="users"
+                         referencedColumnNames="id"/>
     </changeSet>
-    <changeSet id="delete-user-id" author="Timofey Zubrik">
-        <dropColumn tableName="card_info" columnName="user_id"/>
+    <changeSet id="add-unique-card-user" author="Timofey Zubrik">
+        <addUniqueConstraint tableName="card_info"
+                             columnNames="user_id, number"
+                             constraintName="user_card_number_unique"/>
     </changeSet>
 </databaseChangeLog>

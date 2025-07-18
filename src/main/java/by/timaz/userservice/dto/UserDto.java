@@ -10,15 +10,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDto {
-    private long id;
+public class UserDto implements Serializable {
+    private UUID id;
     @NotBlank(message = "Name cannot be empty. ")
     @Pattern(regexp = "^[\\p{L}]+(?:[ \\p{Pd}’']?[\\p{L}]+)*$",
             flags = Pattern.Flag.UNICODE_CASE,
@@ -35,5 +38,10 @@ public class UserDto {
     @NotNull(message = "Birthday cannot be empty")
     @Past(message = "Birthday should be in the past")
     private LocalDate birthday;
-    private List<CardDto> cards;
+    @Builder.Default
+    private Set<CardDto> cards = new HashSet<>();
+
+    public void addCard(CardDto card) {
+        cards.add(card);
+    }
 }

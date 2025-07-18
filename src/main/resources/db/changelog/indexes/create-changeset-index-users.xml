@@ -10,9 +10,4 @@
             <column name="name"/>
         </createIndex>
     </changeSet>
-    <changeSet id="create-index-email" author="Timofey Zubrik">
-        <createIndex tableName="users" indexName="idx_email">
-            <column name="email"/>
-        </createIndex>
-    </changeSet>
 </databaseChangeLog>
