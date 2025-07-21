@@ -13,8 +13,8 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED,
-        uses = CardMap.class)
-public interface UserMap {
+        uses = CardMapper.class)
+public interface UserMapper {
 
     UserDto toUserDto(User user);
 

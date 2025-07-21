@@ -5,7 +5,7 @@ import by.timaz.userservice.dao.repository.CardRepository;
 import by.timaz.userservice.dao.repository.UserRepository;
 import by.timaz.userservice.dto.CardDto;
 import by.timaz.userservice.exception.ResourceNotFoundException;
-import by.timaz.userservice.mapping.CardMap;
+import by.timaz.userservice.mapping.CardMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -20,31 +20,31 @@ import java.util.UUID;
 public class CardService {
     private final CardRepository cardRepository;
     private final UserRepository userRepository;
-    private final CardMap cardMap;
+    private final CardMapper cardMapper;
 
     @CacheEvict(
             cacheNames = "UserService::getUserById",
             key        = "#root.args[1]"
     )
     public CardDto createCard(CardDto cardDto, UUID userId) {
-            Card card =  cardMap.toCard(cardDto);
+            Card card =  cardMapper.toCard(cardDto);
             card.setUser(userRepository
                     .findById(userId)
                     .orElseThrow(
                             () -> new ResourceNotFoundException("User","id",userId.toString())
                     ));
-           return cardMap.toCardDto(cardRepository.save(card));
+           return cardMapper.toCardDto(cardRepository.save(card));
     }
     @Cacheable(value = "CardService::getCardById", key = "#id")
     public CardDto getCardById(UUID id) {
-        return cardMap.toCardDto(cardRepository.findById(id).orElseThrow(
+        return cardMapper.toCardDto(cardRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Card", "id", id.toString())
         ));
     }
 
     @Cacheable(value = "CardService::getCardByNumber", key = "#number")
     public CardDto getCardByNumber(String number) {
-        return cardMap.toCardDto(cardRepository.findByNumber(number).orElseThrow(
+        return cardMapper.toCardDto(cardRepository.findByNumber(number).orElseThrow(
                 () -> new ResourceNotFoundException("Card", "number", number)
         ));
     }
@@ -53,7 +53,7 @@ public class CardService {
     @Transactional
     @CachePut(value =  "CardService::getCardByNumber", key = "#card.number")
     public void updateCard(CardDto card) {
-        cardRepository.save(cardMap.toCard(card));
+        cardRepository.save(cardMapper.toCard(card));
     }
     @Transactional
     @CacheEvict(value = "CardService::getCardById", key = "#id")

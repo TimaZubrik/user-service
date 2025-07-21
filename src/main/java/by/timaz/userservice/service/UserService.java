@@ -5,7 +5,7 @@ import by.timaz.userservice.dao.repository.UserRepository;
 import by.timaz.userservice.dto.UserDto;
 import by.timaz.userservice.dto.UserUpdateDto;
 import by.timaz.userservice.exception.ResourceNotFoundException;
-import by.timaz.userservice.mapping.UserMap;
+import by.timaz.userservice.mapping.UserMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -20,28 +20,28 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final UserMap userMap;
+    private final UserMapper userMapper;
 
     @Caching(put = {
             @CachePut(value = "UserService::getUserById", key = "#result.id"),
             @CachePut(value = "UserService::getUserByEmail", key = "#result.email")
     })
     public UserDto createUser(UserDto user) {
-        User savedUser = userRepository.save(userMap.toUser(user));
-        return userMap.toUserDto(savedUser);
+        User savedUser = userRepository.save(userMapper.toUser(user));
+        return userMapper.toUserDto(savedUser);
 
     }
 
     @Cacheable(value = "UserService::getUserById", key = "#id")
     public UserDto getUserById(UUID id) {
-        return userMap.toUserDto(userRepository.findById(id)
+        return userMapper.toUserDto(userRepository.findById(id)
                 .orElseThrow(
                         ()-> new ResourceNotFoundException("User","id", id.toString())
                 ));
     }
     @Cacheable(value = "UserService::getUserByEmail", key = "#email")
      public UserDto getUserByEmail(String email) {
-        return userMap.toUserDto(userRepository.findUserByEmail(email)
+        return userMapper.toUserDto(userRepository.findUserByEmail(email)
                 .orElseThrow(
                         ()-> new ResourceNotFoundException("User","email", email)
                 ));
@@ -55,8 +55,8 @@ public class UserService {
         if (userDto.getEmail() != null && userDto.getEmail().isBlank()) {
             userDto.setEmail(null);
         }
-        return userMap.toUserDto(
-                userMap.toUser(
+        return userMapper.toUserDto(
+                userMapper.toUser(
                         userDto,
                         userRepository.findById(id)
                                 .orElseThrow(
