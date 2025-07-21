@@ -12,9 +12,9 @@
             <column name="name" type="varchar(64)">
                 <constraints nullable="false"/>
             </column>
-            <column name="surname" type="varchar(64)">
-                <constraints nullable="false"/>
-            </column>
+
+            <column name="surname" type="varchar(64)"/>
+
             <column name="birth_date" type="date">
                 <constraints nullable="false"/>
             </column>

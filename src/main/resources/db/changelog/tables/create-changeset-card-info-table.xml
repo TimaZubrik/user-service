@@ -16,9 +16,10 @@
 
             <column name="number" type="varchar(19)">
                 <constraints nullable="false"/>
+
             </column>
 
-            <column name="holder" type="varchar(64)">
+            <column name="holder" type="varchar(26)">
                 <constraints nullable="false"/>
             </column>
 
