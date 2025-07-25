@@ -21,8 +21,8 @@ jobs:
           cache: maven
       - name: Start DB & Redis via Docker Compose
         run: |
-          docker-compose up -d db redis
-          docker-compose ps
+          docker compose up -d db redis
+          docker compose ps
           sleep 10
       - name: Build with Maven
         run: mvn clean verify
