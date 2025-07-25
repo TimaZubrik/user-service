@@ -3,20 +3,18 @@ name: Start tests
 on:
   push:
     branches: [ test, master ]
-  pull_request:
-    branches: [ master ]
 env:
   IMAGE_NAME: user-service
   DOCKERHUB_REPO: ${{ secrets.DOCKERHUB_USERNAME }}/user-service
 
 jobs:
   build-test:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Code check
         uses: actions/checkout@v4
       - name: Set up JDK 24
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '24'
           distribution: 'temurin'
@@ -27,7 +25,7 @@ jobs:
   build-and-push-image:
     name: Building Docker image
     needs: build-test
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Code check
         uses: actions/checkout@v4
