@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,9 +36,12 @@ public class CardService {
                     ));
            return cardMapper.toCardDto(cardRepository.save(card));
     }
+
     @Cacheable(value = "CardService::getCardById", key = "#id")
     public CardDto getCardById(UUID id) {
-        return cardMapper.toCardDto(cardRepository.findById(id).orElseThrow(
+        return cardMapper.toCardDto(cardRepository
+                .findById(id)
+                .orElseThrow(
                 () -> new ResourceNotFoundException("Card", "id", id.toString())
         ));
     }
@@ -49,12 +53,24 @@ public class CardService {
         ));
     }
 
-
     @Transactional
-    @CachePut(value =  "CardService::getCardByNumber", key = "#card.number")
-    public void updateCard(CardDto card) {
-        cardRepository.save(cardMapper.toCard(card));
+    @Caching(
+            put = {
+                    @CachePut(value =  "CardService::getCardByNumber", key = "#result.number"),
+                    @CachePut(value = "CardService::getCardById", key = "#id")
+            }
+    )
+    public CardDto updateCard(UUID id, CardDto cardDto) {
+        return cardMapper.toCardDto(
+                cardMapper.toCard(
+                        cardDto,
+                        cardRepository.findById(id)
+                                .orElseThrow(
+                                        ()-> new ResourceNotFoundException("Card","id", id.toString())
+                                )
+                ));
     }
+
     @Transactional
     @CacheEvict(value = "CardService::getCardById", key = "#id")
     public void deleteCard(UUID id) {

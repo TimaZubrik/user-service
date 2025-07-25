@@ -28,7 +28,7 @@ public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
-    @Column(name = "number",nullable = false, unique=true, length = 16)
+    @Column(name = "number",nullable = false, length = 16)
     private String number;
     @Column(name = "holder", nullable = false, length = 26)
     private String holder;

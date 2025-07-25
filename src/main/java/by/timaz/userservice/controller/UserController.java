@@ -29,7 +29,7 @@ public class UserController {
     private final CardService cardService;
 
     @GetMapping(path = "{id}")
-    public ResponseEntity<?> getUser(@PathVariable UUID id) {
+    public ResponseEntity<?> getUserById(@PathVariable UUID id) {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
