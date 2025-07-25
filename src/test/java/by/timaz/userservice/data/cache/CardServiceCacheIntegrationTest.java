@@ -17,8 +17,10 @@ import org.springframework.cache.CacheManager;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -31,11 +33,19 @@ import static org.mockito.Mockito.when;
 public class CardServiceCacheIntegrationTest {
 
     @Container
+    static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>(
+            DockerImageName.parse("postgres:17.5-alpine3.22"));
+
+    @Container
     private static final RedisContainer redisContainer =
             new RedisContainer("redis:alpine3.21").withExposedPorts(6379);
 
     @DynamicPropertySource
     static void setProps(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
+        registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
+
         registry.add("spring.data.redis.host", redisContainer::getHost);
         registry.add("spring.data.redis.port", () -> redisContainer.getMappedPort(6379).toString());
     }
