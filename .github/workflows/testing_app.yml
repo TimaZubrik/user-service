@@ -19,6 +19,9 @@ jobs:
           java-version: '24'
           distribution: 'temurin'
           cache: maven
+      - name: Create micro-net network
+        run: |
+          docker network create micro-net || true
       - name: Start DB & Redis via Docker Compose
         run: |
           docker compose up -d db redis
