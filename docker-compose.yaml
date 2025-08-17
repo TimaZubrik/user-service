@@ -17,8 +17,11 @@ services:
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
       SPRING_DATA_REDIS_PASSWORD: ${REDIS_PASSWORD}
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     ports:
       - "8080:8080"
+    networks:
+      - micro-net
   db:
     image: postgres:17.5-alpine3.22
     environment:
@@ -26,7 +29,9 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_DB: ${DB_NAME}
     ports:
-      - "5432:5432"
+      - "5433:5432"
+    networks:
+      - micro-net
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s
@@ -34,14 +39,16 @@ services:
       retries: 5
     volumes:
       - db-data:/var/lib/postgresql/data
+      - ./docker/init:/docker-entrypoint-initdb.d
   redis:
     image: redis:alpine3.21
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
     restart: always
-    container_name: redis
     ports:
       - "6379:6379"
+    networks:
+      - micro-net
     volumes:
       - redis_data:/data
     command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
@@ -54,3 +61,7 @@ volumes:
   db-data:
   redis_data:
     driver: local
+networks:
+  micro-net:
+    driver: bridge
+    external: true

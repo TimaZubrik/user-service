@@ -5,8 +5,6 @@ import by.timaz.userservice.dao.entity.User;
 import by.timaz.userservice.dao.repository.CardRepository;
 import by.timaz.userservice.dao.repository.UserRepository;
 import by.timaz.userservice.dto.CardDto;
-import by.timaz.userservice.dto.UserDto;
-import by.timaz.userservice.dto.UserUpdateDto;
 import by.timaz.userservice.exception.ResourceNotFoundException;
 import by.timaz.userservice.mapping.CardMapper;
 import org.junit.jupiter.api.Test;
@@ -18,10 +16,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+    @ExtendWith(MockitoExtension.class)
 class CardServiceTest {
 
     @Mock
